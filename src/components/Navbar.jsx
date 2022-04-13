@@ -4,12 +4,13 @@ import "./Navbar.css";
 
 export default function Navbar() {
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <ul>
         <li className="logo">
-          <img src={Temple} alt="Qollide Logo" />
-          <span>Qollide - Project Management</span>
+          <img src={Temple} alt="dojo logo" />
+          <span>Qollide</span>
         </li>
+
         <li>
           <Link to="/login">Log in</Link>
         </li>
@@ -20,6 +21,6 @@ export default function Navbar() {
           <button className="btn">Log out</button>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 }
