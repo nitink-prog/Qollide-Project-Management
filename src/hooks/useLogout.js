@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { auth } from "../firebase/config";
+import { auth, db } from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogout = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
-  const { dispatch } = useAuthContext();
+  const { dispatch, user } = useAuthContext();
 
   const logout = async () => {
     setError(null);
@@ -14,6 +14,12 @@ export const useLogout = () => {
 
     // sign user out
     try {
+      // Change user to offline
+      const { uid } = user;
+      await db.collection("users").doc(uid).update({
+        online: false,
+      });
+
       // firebase auth method
       await auth.signOut();
       // tell AuthContext to set the user: null
