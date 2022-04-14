@@ -76,7 +76,7 @@ export default function Signup() {
       </label>
       {isPending ? (
         <button className="btn" disabled>
-          Sign up
+          Loading...
         </button>
       ) : (
         <button className="btn">Sign up</button>

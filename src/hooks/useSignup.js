@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { auth, storage } from "../firebase/config";
+import { db, auth, storage } from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
@@ -20,13 +20,21 @@ export const useSignup = () => {
         throw new Error("Sign up failed. :(");
       }
 
-      // Upload user profile picture
+      // upload user profile picture
       const thumbnailPath = `thumbnails/${res.user.uid}/thumbnail.jpg`;
       const storedImg = await storage.ref(thumbnailPath).put(thumbnail);
       const storedImgUrl = await storedImg.ref.getDownloadURL();
 
       // add user's display name
       await res.user.updateProfile({ displayName, photoURL: storedImgUrl });
+
+      // create a user document
+      await db.collection("users").doc(res.user.uid).set({
+        online: true,
+        displayName,
+        photoURL: storedImgUrl,
+      });
+
       // dispatch LOGIN to AuthContext
       dispatch({ type: "LOGIN", payload: res.user });
 
