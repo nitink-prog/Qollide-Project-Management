@@ -6,9 +6,39 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailError, setThumbnailError] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(email, password, displayName, thumbnail)
+  }
+
+  const handleChangeFile = (e) => {
+    setThumbnail(null);
+    let usrImg = e.target.files[0];
+    console.log(usrImg);
+
+    // Checking for validity
+    if (!usrImg) {
+      setThumbnailError("Please upload a profile picture!");
+      return;
+    }
+    if (!usrImg.type.includes("image")) {
+      setThumbnailError("Please select an image file! (.jpg .png)");
+      return;
+    }
+    if (usrImg.size > 1000000) {
+      setThumbnailError("Please select an image smaller than 1MB!");
+      return;
+    }
+    // Success
+    setThumbnailError(null);
+    setThumbnail(usrImg);
+    console.log("Profile picture updated");
+  };
 
   return (
-    <form className="auth-form">
+    <form className="auth-form" onSubmit={handleSubmit}>
       <h2>Brace for Qollision!</h2>
       <label>
         <label>
@@ -39,10 +69,8 @@ export default function Signup() {
       </label>
       <label>
         <span>Profile Picture:</span>
-        <input
-          required
-          type="file"
-        />
+        <input required type="file" onChange={handleChangeFile} />
+        {thumbnailError && <div className="error">{thumbnailError}</div>}
       </label>
       <button className="btn">Sign up</button>
     </form>
