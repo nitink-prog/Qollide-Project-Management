@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
 import "./Signup.css";
 
@@ -42,16 +43,18 @@ export default function Signup() {
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
       <h2>Brace for Qollision!</h2>
+      <p>Create an account.</p>
+      <Link to="/login">Already have one?</Link>
       <label>
-        <label>
-          <span>Name:</span>
-          <input
-            required
-            type="text"
-            onChange={(e) => setDisplayName(e.target.value)}
-            value={displayName}
-          />
-        </label>
+        <span>Name:</span>
+        <input
+          required
+          type="text"
+          onChange={(e) => setDisplayName(e.target.value)}
+          value={displayName}
+        />
+      </label>
+      <label>
         <span>Email:</span>
         <input
           required
