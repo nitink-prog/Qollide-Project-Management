@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import UserList from "./components/UserList";
 import Create from "./pages/create/Create";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
@@ -37,6 +38,7 @@ function App() {
               </Route>
             </Switch>
           </div>
+          {user && <UserList />}
         </BrowserRouter>
       )}
     </div>
