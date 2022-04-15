@@ -22,9 +22,15 @@ export const useSignup = () => {
 
       // upload user profile picture
       const thumbnailPath = `thumbnails/${res.user.uid}/thumbnail.jpg`;
-      const storedImg = await storage.ref(thumbnailPath).put(thumbnail);
-      const storedImgUrl = await storedImg.ref.getDownloadURL();
-
+      let storedImgUrl;
+      if (thumbnail) {
+        const storedImg = await storage.ref(thumbnailPath).put(thumbnail);
+        storedImgUrl = await storedImg.ref.getDownloadURL();
+      } else {
+        storedImgUrl = await storage
+          .ref("thumbnails/default/default.png")
+          .getDownloadURL();
+      }
       // add user's display name
       await res.user.updateProfile({ displayName, photoURL: storedImgUrl });
 

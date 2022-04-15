@@ -22,10 +22,11 @@ export default function Signup() {
     console.log(usrImg);
 
     // Checking for validity
-    if (!usrImg) {
-      setThumbnailError("Please upload a profile picture!");
-      return;
-    }
+    // Commented this bc we shouldn't REQUIRE a pfp to make account
+    // if (!usrImg) {
+    //   setThumbnailError("Please upload a profile picture!");
+    //   return;
+    // }
     if (!usrImg.type.includes("image")) {
       setThumbnailError("Please select an image file! (.jpg .png)");
       return;
@@ -36,8 +37,9 @@ export default function Signup() {
     }
     // Success
     setThumbnailError(null);
-    setThumbnail(usrImg);
-    console.log("Profile picture updated");
+    if (usrImg) {
+      setThumbnail(usrImg);
+    }
   };
 
   return (
@@ -74,7 +76,7 @@ export default function Signup() {
       </label>
       <label>
         <span>Profile Picture:</span>
-        <input required type="file" onChange={handleChangeFile} />
+        <input type="file" onChange={handleChangeFile} />
         {thumbnailError && <div className="error">{thumbnailError}</div>}
       </label>
       {isPending ? (
