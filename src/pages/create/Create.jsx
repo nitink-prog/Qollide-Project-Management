@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useCollection } from "../../hooks/useCollection";
 import "./Create.css";
 
 // this is for the categories later
@@ -11,15 +12,39 @@ const categories = [
 ];
 
 export default function Create() {
+  // fetching users for the Assignment selector
+  const { documents } = useCollection("users");
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    if (documents) {
+      const options = documents.map((user) => {
+        return { value: user, label: user.displayName };
+      });
+      setUsers(options);
+    }
+  }, [documents]);
+
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
   const [assignedUsers, setAssignedUsers] = useState([]);
+  const [formError, setFormError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name, details, dueDate, category.value);
+    setFormError(null);
+
+    if (!category) {
+      setFormError("Please select a Category!");
+      return;
+    }
+    if (assignedUsers.length < 1) {
+      setFormError("Please select who will Qollide with this project!");
+      return;
+    }
+    console.log(name, details, dueDate, category.value, assignedUsers);
   };
 
   return (
@@ -56,15 +81,20 @@ export default function Create() {
         <label>
           <span>Category:</span>
           <Select
-            options={categories}
             onChange={(option) => setCategory(option)}
+            options={categories}
           />
         </label>
         <label>
           <span>Qollide with:</span>
-          {/* assignedUsers selector here */}
+          <Select
+            onChange={(options) => setAssignedUsers(options)}
+            options={users}
+            isMulti
+          />
         </label>
         <button className="btn">Let's Go!</button>
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   );
