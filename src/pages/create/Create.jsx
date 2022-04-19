@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useCollection } from "../../hooks/useCollection";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { timestamp } from "../../firebase/config";
 import "./Create.css";
 
 // this is for the categories later
@@ -12,6 +14,9 @@ const categories = [
 ];
 
 export default function Create() {
+  // fetching current user for the Form Submit
+  const { user } = useAuthContext();
+
   // fetching users for the Assignment selector
   const { documents } = useCollection("users");
   const [users, setUsers] = useState([]);
@@ -44,7 +49,32 @@ export default function Create() {
       setFormError("Please select who will Qollide with this project!");
       return;
     }
-    console.log(name, details, dueDate, category.value, assignedUsers);
+
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
+    };
+
+    const assignedUsersList = assignedUsers.map((assignee) => {
+      return {
+        displayName: assignee.value.displayName,
+        photoURL: assignee.value.photoURL,
+        id: assignee.value.id,
+      };
+    });
+
+    const project = {
+      name,
+      details,
+      category: category.value,
+      dueDate: timestamp.fromDate(new Date(dueDate)),
+      comments: [],
+      createdBy,
+      assignedUsersList,
+    };
+
+    console.log(project);
   };
 
   return (
