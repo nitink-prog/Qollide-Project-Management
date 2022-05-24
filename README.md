@@ -10,3 +10,5 @@ The concept for this app is to help teams track their projects, assign different
 - Live online users data
 - Redirects and Route Guards
 - Conditional rendering based on user login
+
+I'll be writing a better README in the near future...
